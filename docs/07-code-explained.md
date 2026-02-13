@@ -24,6 +24,11 @@ Related:
 4. `scripts/uart_term.py`
 - Dependency-free UART terminal with raw mode + bidirectional forwarding.
 
+5. `scripts/ssh-router.sh`
+- SSH launcher helper for day-to-day router access.
+- Resolves interface + host reachability, optionally retries DHCP, then opens SSH.
+- Optional `--down-wifi` temporarily disables Wi-Fi checks to reduce route conflicts.
+
 ## `recover.sh` Flow
 
 - `parse_args()`: reads safety/control flags (`--yes`, `--dry-run`, `--eth-if`, `--post-flash-wait-only`).
@@ -34,6 +39,15 @@ Related:
 - `cleanup_recovery()`: stop recovery service + tracked background processes.
 - `switch_to_dhcp()`: remove static recovery IP, renew DHCP.
 - `probe_ui()`: test `192.168.8.1` and `192.168.1.1`.
+
+## `ssh-router.sh` Flow
+
+- `parse_args()`: reads access flags (`--iface`, `--hosts`, `--dry-run`, `--down-wifi`, `--no-dhcp`).
+- `pick_iface()`: chooses explicit interface or auto-detects wired interface.
+- `down_wifi_if_requested()`: temporarily disables Wi-Fi interfaces only when requested.
+- `reachable()`: runs fast ping probes on candidate router IPs.
+- `run_dhcp()`: refreshes wired DHCP lease before second probe pass.
+- launches SSH with strict host-key accept-new once a host is reachable.
 
 ## Reliability Notes
 

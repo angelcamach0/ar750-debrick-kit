@@ -41,6 +41,18 @@ For unattended/non-interactive runs:
 ./scripts/recover.sh --yes
 ```
 
+Fast SSH helper (auto-detect iface + host):
+
+```bash
+./scripts/ssh-router.sh
+```
+
+If routing is ambiguous, pin interface and optionally bring Wi-Fi down during checks:
+
+```bash
+./scripts/ssh-router.sh --iface enx00e04c6876c4 --down-wifi
+```
+
 ## Safety First
 
 - This repo flashes **router firmware** (not PC BIOS).
@@ -67,6 +79,7 @@ For wiring details, read [04-uart-arduino.md](docs/04-uart-arduino.md).
 - `scripts/ar750-recovery.sh`: TFTP service helper
 - `scripts/router-recover.sh`: UART/probe helper
 - `scripts/uart_term.py`: minimal dependency-free UART terminal
+- `scripts/ssh-router.sh`: reachability + DHCP retry + SSH launcher
 
 ## Runtime Logs
 
