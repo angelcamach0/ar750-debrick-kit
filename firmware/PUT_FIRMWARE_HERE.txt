@@ -1,0 +1,6 @@
+Drop exactly ONE AR750 firmware .bin file in this folder, then run:
+
+  ./scripts/recover.sh
+
+Example filename used in testing:
+  openwrt-ar750-4.3.25-0331-1743425412.bin

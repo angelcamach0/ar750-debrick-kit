@@ -1,0 +1,8 @@
+logs/*
+!logs/.gitkeep
+tftp-root/*
+!tftp-root/.gitkeep
+firmware/*.bin
+
+__pycache__/
+*.pyc
