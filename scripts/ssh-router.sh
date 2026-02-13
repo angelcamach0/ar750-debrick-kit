@@ -17,6 +17,7 @@ RUN_DHCP="${RUN_DHCP:-1}"
 DOWN_WIFI="${DOWN_WIFI:-0}"
 SSH_EXTRA="${SSH_EXTRA:-}"
 WIFI_IFS_DOWN=()
+SUDO_READY=0
 
 need_cmd() {
   command -v "$1" >/dev/null 2>&1 || {
@@ -155,6 +156,22 @@ restore_wifi() {
   done
 }
 
+ensure_sudo_ready() {
+  # Request sudo once so DHCP/Wi-Fi operations don't repeatedly prompt/fail.
+  [[ "$SUDO_READY" == "1" ]] && return 0
+  if [[ "$DRY_RUN" == "1" ]]; then
+    SUDO_READY=1
+    return 0
+  fi
+  if sudo -n true 2>/dev/null; then
+    SUDO_READY=1
+    return 0
+  fi
+  echo "This step needs sudo for network actions (DHCP and/or Wi-Fi toggling)."
+  sudo -v
+  SUDO_READY=1
+}
+
 run_dhcp() {
   local iface="$1"
   if [[ "$RUN_DHCP" == "0" ]]; then
@@ -167,6 +184,7 @@ run_dhcp() {
     return 0
   fi
 
+  ensure_sudo_ready
   # Best-effort lease refresh; may fail harmlessly if no DHCP server exists.
   sudo dhclient -r "$iface" || true
   sudo dhclient -v "$iface" || true
@@ -194,6 +212,10 @@ main() {
   trap restore_wifi EXIT INT TERM
 
   pick_iface
+  # If script will need privileged network changes, authenticate once first.
+  if [[ "$RUN_DHCP" == "1" || "$DOWN_WIFI" == "1" ]]; then
+    ensure_sudo_ready
+  fi
   down_wifi_if_requested
   print_iface_state "$IFACE"
 

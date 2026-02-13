@@ -61,6 +61,7 @@ If routing is ambiguous, pin interface and optionally bring Wi-Fi down during ch
 - Router must be powered by its own power supply.
 
 For wiring details, read [04-uart-arduino.md](docs/04-uart-arduino.md).
+Pinout image: [docs/assets/ar750-pinout.jpg](docs/assets/ar750-pinout.jpg).
 
 ## Documentation Map
 

@@ -17,6 +17,12 @@ UART is optional for TFTP recovery, but useful for visibility.
 
 ## Pins Used In This Recovery Build
 
+Pinout reference image from this repo:
+
+![GL-AR750 pinout](assets/ar750-pinout.jpg)
+
+Use the UART block labeled `GND`, `RX`, `TX` in the image above.
+
 AR750 UART header labels:
 - `GND`
 - `RX` (GPIO10)
